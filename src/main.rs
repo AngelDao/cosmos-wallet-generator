@@ -9,6 +9,7 @@ use k256::ecdsa::VerifyingKey;
 use rand_core::OsRng;
 use std::fs::File;
 use std::io::prelude::*;
+use std::convert::TryFrom;
 // impl std::fmt::Debug for secp256k1::SigningKey {
 //     fn fmt(&self) -> String {
 //         format!("{:?}", self)
@@ -21,21 +22,21 @@ fn main() {
     file.read_to_string(&mut key)
         .expect("Oops!, cannot read file...");
     // println!("{:#?}", &key.as_bytes());
-    let bytes: &[u8] = key.as_bytes();
+    let bytes: [u8, 32] = key.as_bytes();
     // let s = String::from("hello0").unwrap();
-    // let bytes = decode(&s);
+    // let pkey = &decode(bytes).unwrap();
     println!("{:#?}", &bytes);
-    // let sender_private_key = k256::ecdsa::SigningKey::from_bytes(&bytes);
+    // let sender_private_key = k256::ecdsa::SigningKey::try_from(key.as_bytes());
     // println!("privkey {:#?}", sender_private_key);
-    let sender_private_key = secp256k1::SigningKey::from_bytes(bytes);
+    let sender_private_key = secp256k1::SigningKey::from_bytes(pkey);
     match sender_private_key {
         Ok(res) => {
-            let sender_public_key = res.public_key();
-            let sender_account_id = sender_public_key.account_id("cosmos").unwrap();
-            println!(
-                "pubkey {:#?}\naccountid{:#?}",
-                sender_public_key, sender_account_id
-            );
+            // let sender_public_key = res.public_key();
+            // let sender_account_id = sender_public_key.account_id("cosmos").unwrap();
+            // println!(
+            //     "pubkey {:#?}\naccountid{:#?}",
+            //     sender_public_key, sender_account_id
+            // );
         }
         Err(err) => println!("{:#?}", err),
     }
