@@ -10,41 +10,29 @@ use rand_core::OsRng;
 use std::fs::File;
 use std::io::prelude::*;
 use std::convert::TryFrom;
-use bip39::{Language, Mnemonic};
-// impl std::fmt::Debug for secp256k1::SigningKey {
-//     fn fmt(&self) -> String {
-//         format!("{:?}", self)
-//     }
-// }
+use bip39::{Mnemonic, MnemonicType, Language, Seed};
+use bip32::{ExtendedPrivateKey, PrivateKey, XPrv};
 
 fn main() {
     let mut file = File::open("seed.txt").expect("cant open file");
     let mut key = String::new();
     file.read_to_string(&mut key)
         .expect("Oops!, cannot read file...");
-    // println!("{:#?}", &key.as_bytes());
     let bytes: &[u8] = &key.as_bytes();
-    // let s = String::from("hello0").unwrap();
-    // let pkey = &decode(bytes).unwrap();
-    println!("{:#?}", &bytes.len());
-
-    let mne = Mnemonic::parse_normalized(&key).unwrap();
-
-    println!("{:#?}", mne.to_seed());
-    // let sender_private_key = k256::ecdsa::SigningKey::from_bytes(bytes);
-    // println!("privkey {:#?}", sender_private_key);
-    // let sender_private_key = secp256k1::SigningKey::from_bytes(bytes);
-    // match sender_private_key {
-    //     Ok(res) => {
-    //         // let sender_public_key = res.public_key();
-    //         // let sender_account_id = sender_public_key.account_id("cosmos").unwrap();
-    //         // println!(
-    //         //     "pubkey {:#?}\naccountid{:#?}",
-    //         //     sender_public_key, sender_account_id
-    //         // );
-    //     }
-    //     Err(err) => println!("{:#?}", err),
-    // }
-
-    // println!("privkey {:#?}", sender_private_key);
+    let mnemonic = Mnemonic::from_phrase(&key, Language::English).unwrap();
+    println!("{:#?}", mnemonic);
+    let seed = Seed::new(&mnemonic, "");
+    println!("{:#?}", seed);
+    let root_privk = XPrv::new(&seed).unwrap();
+    let privk = XPrv::derive_from_path(&seed, &"m/44'/118'/0'/0/0".parse().unwrap()).unwrap();
+    println!("{:#?}", &privk.private_key());
+    let bytes2 = privk.private_key().to_bytes();
+    println!("bytes2 {:#?}", &bytes2);
+    let sender_private_key = secp256k1::SigningKey::from_bytes(bytes2.as_slice()).unwrap();
+    let sender_public_key = sender_private_key.public_key();
+    let sender_account_id = sender_public_key.account_id("cosmos").unwrap();
+    println!(
+        "pubkey {:#?}\naccountid{:#?}",
+        sender_public_key, sender_account_id
+    );
 }
