@@ -22,13 +22,13 @@ fn main() {
     file.read_to_string(&mut key)
         .expect("Oops!, cannot read file...");
     // println!("{:#?}", &key.as_bytes());
-    let bytes: [u8, 32] = key.as_bytes();
+    let bytes: &[u8] = key.as_bytes();
     // let s = String::from("hello0").unwrap();
     // let pkey = &decode(bytes).unwrap();
     println!("{:#?}", &bytes);
-    // let sender_private_key = k256::ecdsa::SigningKey::try_from(key.as_bytes());
+    // let sender_private_key = k256::ecdsa::SigningKey::from_bytes(bytes);
     // println!("privkey {:#?}", sender_private_key);
-    let sender_private_key = secp256k1::SigningKey::from_bytes(pkey);
+    let sender_private_key = secp256k1::SigningKey::from_bytes(bytes);
     match sender_private_key {
         Ok(res) => {
             // let sender_public_key = res.public_key();
