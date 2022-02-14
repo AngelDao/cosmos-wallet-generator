@@ -8,7 +8,7 @@ use bip39::{Mnemonic, MnemonicType, Language, Seed};
 use bip32::{ExtendedPrivateKey, PrivateKey, XPrv};
 
 fn main() {
-    let mut file = File::open("seed.txt").expect("cant open file");
+    let mut file = File::open("mnemonic.txt").expect("cant open file");
     let mut key = String::new();
     file.read_to_string(&mut key)
         .expect("Oops!, cannot read file...");
