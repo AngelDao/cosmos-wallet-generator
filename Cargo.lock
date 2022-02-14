@@ -127,8 +127,6 @@ version = "0.1.0"
 dependencies = [
  "bip32",
  "cosmrs",
- "hex",
- "k256",
  "rand_core 0.6.3",
  "tiny-bip39",
 ]
@@ -421,12 +419,6 @@ dependencies = [
  "rand_core 0.6.3",
  "subtle",
 ]
-
-[[package]]
-name = "hex"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "hmac"

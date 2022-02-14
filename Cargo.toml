@@ -8,8 +8,6 @@ edition = "2018"
 
 [dependencies]
 cosmrs = "0.4.1"
-k256 = "0.10.2"
 rand_core = "0.6.3"
-hex = "0.4.3"
 tiny-bip39 = "0.8.2"
 bip32 = "0.3.0"
