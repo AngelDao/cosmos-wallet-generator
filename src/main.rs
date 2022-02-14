@@ -1,6 +1,6 @@
 use cosmrs::{
     crypto::secp256k1,
-};  
+};
 use std::fs::File;
 use std::io::prelude::*;
 use std::convert::TryFrom;
@@ -18,13 +18,15 @@ fn main() {
     let seed = Seed::new(&mnemonic, "");
     println!("{:#?}", seed);
     let root_privk = XPrv::new(&seed).unwrap();
-    let privk = XPrv::derive_from_path(&seed, &"m/44'/118'/0'/0/0".parse().unwrap()).unwrap();
+    // evmos "m/44'/60'/0'/0/0"
+    // cosmos "m/44'/118'/0'/0/0"
+    let privk = XPrv::derive_from_path(&seed, &"m/44'/60'/0'/0/0".parse().unwrap()).unwrap();
     println!("{:#?}", &privk.private_key());
     let bytes2 = privk.private_key().to_bytes();
     println!("bytes2 {:#?}", &bytes2);
     let sender_private_key = secp256k1::SigningKey::from_bytes(bytes2.as_slice()).unwrap();
     let sender_public_key = sender_private_key.public_key();
-    let sender_account_id = sender_public_key.account_id("cosmos").unwrap();
+    let sender_account_id = sender_public_key.account_id("evmos").unwrap();
     println!(
         "pubkey {:#?}\naccountid{:#?}",
         sender_public_key, sender_account_id
