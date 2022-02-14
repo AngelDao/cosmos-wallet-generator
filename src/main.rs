@@ -1,6 +1,6 @@
 use cosmrs::{
     crypto::secp256k1,
-};
+};  
 use std::fs::File;
 use std::io::prelude::*;
 use std::convert::TryFrom;
